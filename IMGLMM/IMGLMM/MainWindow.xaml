@@ -8,14 +8,14 @@
         Title="MainWindow" Height="350" Width="525">
     <Grid>
         <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="432,288,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
-        <ListView x:Name="listView" HorizontalAlignment="Left" Height="267" Margin="10,43,0,0" VerticalAlignment="Top" Width="126">
+        <ListView x:Name="listView" HorizontalAlignment="Left" Height="267" Margin="10,43,0,0" VerticalAlignment="Top" Width="126" MouseDoubleClick="listView_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="listView1" HorizontalAlignment="Left" Height="267" Margin="141,43,0,0" VerticalAlignment="Top" Width="125">
+        <ListView x:Name="listView1" HorizontalAlignment="Left" Height="264" Margin="141,46,0,0" VerticalAlignment="Top" Width="125">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>

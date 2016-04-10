@@ -26,9 +26,10 @@ namespace IMGLMM
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<String> torunaments = new List<String>();
+        private List<String> tournaments = new List<String>();
         private List<String> Matchs = new List<String>();
-        User user = new User();
+
+        LolData data = new LolData();
 
         //private IWebDriver driver;
 
@@ -37,136 +38,86 @@ namespace IMGLMM
         public MainWindow()
         {
             InitializeComponent();
+            data.ApiData();
 
-            using (var webClient = new System.Net.WebClient())
-            {
-                string tournaments = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/tournament.php");
-
-                tournaments = @"{""tournament"" :" + tournaments + "}";
-
-                
-                user.TournamentData(tournaments);
-
-            }
-
-            using (var webClient = new System.Net.WebClient())
-            {
-                var matchs = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/match.php");
-
-                matchs = @"{""match"" :" + matchs + "}";
-                user.MatchData(matchs);
-            }
-
-            using (var webClient = new System.Net.WebClient())
-            {
-                var tournamentMatchIdentidieTable = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/tournamentmatch.php");
-
-            }
-
-            using (var webClient = new System.Net.WebClient())
-            {
-                var teams = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/team.php");
-
-                teams = @"{""team"" :" + teams + "}";
-                user.TeamData(teams);
-            }
-
-            using (var webClient = new System.Net.WebClient())
-            {
-                var teamMatchIdentifieTable = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/teammatch.php");
-
-            }
-
-            using (var webClient = new System.Net.WebClient())
-            {
-                var teamPerformances = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/teamperformance.php");
-
-                teamPerformances = @"{""teamperformance"" :" + teamPerformances + "}";
-                user.TeamPerformanceData(teamPerformances);
-            }
-
-            using (var webClient = new System.Net.WebClient())
-            {
-                var players = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/player.php");
-
-                players = @"{""player"" :" + players + "}";
-                user.PlayerData(players);
-            }
-
-            using (var webClient = new System.Net.WebClient())
-            {
-                var playerTeamIdentifieTable = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/playerteam.php");
-
-            }
-
-            using (var webClient = new System.Net.WebClient())
-            {
-                var playerPerformances = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/playerperformance.php");
-
-                playerPerformances = @"{""playerperformance"" :" + playerPerformances + "}";
-                user.PlayerPerformanceData(playerPerformances);
-            }
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            
-           /* driver = new FirefoxDriver();
-            INavigation nav = driver.Navigate();
-            nav.GoToUrl("http://www.pinnaclesports.com/fi/odds/match/e-sports/league-of-legends/league-of-legends-championship-series");
 
-            IList<IWebElement> selectElements = driver.FindElements(By.ClassName("ng-scope"));
+            /* driver = new FirefoxDriver();
+             INavigation nav = driver.Navigate();
+             nav.GoToUrl("http://www.pinnaclesports.com/fi/odds/match/e-sports/league-of-legends/league-of-legends-championship-series");
 
-            Console.WriteLine(selectElements.Count);*/
+             IList<IWebElement> selectElements = driver.FindElements(By.ClassName("ng-scope"));
+
+             Console.WriteLine(selectElements.Count);*/
 
 
-           /* IList<IWebElement> selectElements = driver.FindElements(By.ClassName(root));
-            IList<IWebElement> match = driver.FindElements(By.CssSelector("table.odds-browser td.market_title a.event_name"));
+            /* IList<IWebElement> selectElements = driver.FindElements(By.ClassName(root));
+             IList<IWebElement> match = driver.FindElements(By.CssSelector("table.odds-browser td.market_title a.event_name"));
 
-                    
 
-            //for (int j = 0; j < match.Count; j++) {
-                selectElements[1].Click();
-                match[1].Click();
 
-                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
-                wait.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.ClassName("oddsbody")));
+             //for (int j = 0; j < match.Count; j++) {
+                 selectElements[1].Click();
+                 match[1].Click();
 
-                IWebElement oddsTable = driver.FindElement(By.ClassName("oddsbody"));
+                 WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(30));
+                 wait.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.ClassName("oddsbody")));
 
-                // driver.Close();
+                 IWebElement oddsTable = driver.FindElement(By.ClassName("oddsbody"));
 
-                string odds = oddsTable.GetAttribute("innerHTML");
+                 // driver.Close();
 
-                //Console.Write(odds);
-                //Console.Write("<!-- -------------------------------------------------------------------------------------------- -->");
-                driver.Navigate().Back();
-*/
-            }
+                 string odds = oddsTable.GetAttribute("innerHTML");
+
+                 //Console.Write(odds);
+                 //Console.Write("<!-- -------------------------------------------------------------------------------------------- -->");
+                 driver.Navigate().Back();
+                 */
+        }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            torunaments = user.TorunamentList();
-            Matchs = user.MatchsList();
+            tournaments = data.TournamentList();
 
             listView.ItemsSource = null;
-            listView1.ItemsSource = null;
+            listView.ItemsSource = tournaments;
+        }
 
-            listView.ItemsSource = torunaments;
+        private void listView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Matchs = data.MatchsList(listView.SelectedIndex);
+
+
+            listView1.ItemsSource = null;
             listView1.ItemsSource = Matchs;
         }
         // }
     }
 
-    public class User
+    public class LolData
     {
-        private string date;
+        private string date, tournamentMatchIdentifieTable, matchs;
 
-        private List<String> torunaments = new List<String>();
+        private List<String> tournamentsList = new List<String>();
+        private List<String> tournamentsInfoList = new List<String>();
+
         private List<String> Matchs = new List<String>();
 
+        /*private List<String> MatchsEu2015Summer = new List<String>();
+          private List<String> MatchsEu2015SummerPlayoffs = new List<String>();
+          private List<String> MatchsEu2015Regionals = new List<String>();
+          private List<String> MatchsEu2016Spring = new List<String>();*/
+
         public string tournamentTitle { get; set; }
-        public string torunamentHash { get; set; }
+
+        public string tournamentInfo
+        {
+            get { return tournamentTitle + ";" + torunamentID; }
+        }
+
         public string torunamentID { get; set; }
 
         public string matchDate
@@ -202,26 +153,93 @@ namespace IMGLMM
         public string deaths { get; set; }
         public string assists { get; set; }
 
-        public void TournamentData(string json) {
+        public void ApiData()
+        {
+            using (var webClient = new System.Net.WebClient())
+            {
+                string tournaments = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/tournament.php");
+
+                tournaments = @"{""tournament"" :" + tournaments + "}";
+                TournamentData(tournaments);
+
+            }
+
+            using (var webClient = new System.Net.WebClient())
+            {
+                var matchsApi = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/match.php");
+                var tournamentMatchIdentifieTableApi = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/tournamentmatch.php");
+
+                tournamentMatchIdentifieTable = @"{""dataStruct"" :" + tournamentMatchIdentifieTableApi + "}";
+                matchs = @"{""match"" :" + matchsApi + "}";
+
+
+            }
+
+            using (var webClient = new System.Net.WebClient())
+            {
+                var teams = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/team.php");
+
+                teams = @"{""team"" :" + teams + "}";
+                TeamData(teams);
+            }
+
+            using (var webClient = new System.Net.WebClient())
+            {
+                var teamMatchIdentifieTable = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/teammatch.php");
+
+            }
+
+            using (var webClient = new System.Net.WebClient())
+            {
+                var teamPerformances = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/teamperformance.php");
+
+                teamPerformances = @"{""teamperformance"" :" + teamPerformances + "}";
+                TeamPerformanceData(teamPerformances);
+            }
+
+            using (var webClient = new System.Net.WebClient())
+            {
+                var players = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/player.php");
+
+                players = @"{""player"" :" + players + "}";
+                PlayerData(players);
+            }
+
+            using (var webClient = new System.Net.WebClient())
+            {
+                var playerTeamIdentifieTable = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/playerteam.php");
+
+            }
+
+            using (var webClient = new System.Net.WebClient())
+            {
+                var playerPerformances = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/playerperformance.php");
+
+                playerPerformances = @"{""playerperformance"" :" + playerPerformances + "}";
+                PlayerPerformanceData(playerPerformances);
+            }
+        }
+
+        public void TournamentData(string json)
+        {
             dynamic dynObj = JsonConvert.DeserializeObject(json);
 
             foreach (var data in dynObj.tournament)
             {
                 this.tournamentTitle = data.tournamentTitle;
-                this.torunamentHash = data.tournamentHash;
                 this.torunamentID = data.identifier;
 
-                torunaments.Add(this.tournamentTitle);
+                tournamentsInfoList.Add(tournamentInfo);
 
                 /*Console.Write("tournament" + ":" + data.tournamentTitle + "\n");
-                Console.Write("torunamenthash" + ":" + data.tournamentHash + "\n");
                 Console.Write("ID" + ":" + data.identifier + "\n");*/
             }
         }
 
-        public void MatchData(string json)
+        public void MatchData(string json, string structTable, string tournamentIdentifier)
         {
             dynamic dynObj = JsonConvert.DeserializeObject(json);
+            dynamic dynObjStructTable = JsonConvert.DeserializeObject(structTable);
 
             foreach (var data in dynObj.match)
             {
@@ -229,7 +247,15 @@ namespace IMGLMM
                 this.matchDate = data.date;
                 this.matchID = data.identifier;
 
-                Matchs.Add(this.matchHash);
+                // find right tournament
+                foreach (var datastruct in dynObjStructTable.dataStruct)
+                {
+                    if (datastruct.tournament_identifier == tournamentIdentifier & datastruct.tournamentMatch_identifier == this.matchID)
+                    {
+                        Matchs.Add(this.matchHash);
+                        break;
+                    }
+                }
 
                 /*Console.Write("match hash" + ":" + data.matchHash + "\n");
                 Console.Write("match date" + ":" + data.date + "\n");
@@ -314,20 +340,35 @@ namespace IMGLMM
                 this.assists = data.assist;
                 this.playerID = data.player_identifier;
 
-               /* Console.Write("kills" + ":" + data.kills + "\n");
-                Console.Write("deathsr" + ":" + data.deaths + "\n");
-                Console.Write("assists" + ":" + data.assist + "\n");
-                Console.Write("playerID" + ":" + data.player_identifier + "\n");*/
+                /* Console.Write("kills" + ":" + data.kills + "\n");
+                 Console.Write("deathsr" + ":" + data.deaths + "\n");
+                 Console.Write("assists" + ":" + data.assist + "\n");
+                 Console.Write("playerID" + ":" + data.player_identifier + "\n");*/
             }
         }
 
-        public List<String> TorunamentList() {
-            return this.torunaments;
+        public List<String> TournamentList()
+        {
+            for (int tournamentListIndex = 0; tournamentListIndex < tournamentsInfoList.Count; tournamentListIndex++)
+            {
+                string[] tournamentTitleName = tournamentsInfoList[tournamentListIndex].Split(';');
+
+                tournamentsList.Add(tournamentTitleName[0]);
+            }
+
+            return this.tournamentsList;
         }
 
-        public List<String> MatchsList()
+        public List<String> MatchsList(int index)
         {
+            Matchs.Clear();
+
+            string[] tournamentIdentifier = tournamentsInfoList[index].Split(';');
+
+            MatchData(matchs, tournamentMatchIdentifieTable, tournamentIdentifier[1]);
+
             return this.Matchs;
+            //return this.Matchs;
         }
     }
 }
