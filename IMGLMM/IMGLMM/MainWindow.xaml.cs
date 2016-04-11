@@ -28,6 +28,7 @@ namespace IMGLMM
     {
         private List<String> tournaments = new List<String>();
         private List<String> Matchs = new List<String>();
+        private List<String> performance = new List<String>();
 
         LolData data = new LolData();
 
@@ -91,18 +92,30 @@ namespace IMGLMM
             listView1.ItemsSource = null;
             listView1.ItemsSource = Matchs;
         }
+
+        private void listView1_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            data.TeamPerformanceData(listView1.SelectedIndex);
+            listView2.ItemsSource = null;
+
+            //listView2.ItemsSource = data.teamBlue();
+            listView2.ItemsSource = data.teamRed();
+        }
         // }
     }
 
     public class LolData
     {
-        private string date, tournamentMatchIdentifieTable, matchs, teams, teamMatchIdentifieTable;
+        private string date, tournamentMatchIdentifieTable, matchs, teams, teamMatchIdentifieTable, teamPerformances;
 
         private List<String> tournamentsList = new List<String>();
         private List<String> tournamentsInfoList = new List<String>();
 
         private List<String> Matchs = new List<String>();
         private List<String> MatchsInfoList = new List<String>();
+
+        private List<String> teamBluePerformanceList = new List<String>();
+        private List<String> teamRedPerformanceList = new List<String>();
 
         /*private List<String> MatchsEu2015Summer = new List<String>();
           private List<String> MatchsEu2015SummerPlayoffs = new List<String>();
@@ -144,7 +157,7 @@ namespace IMGLMM
 
         public string teamInfo
         {
-            get { return teamBlueName + " vs " + teamRedName + " - " + matchDate; }
+            get { return teamBlueName + " vs " + teamRedName + " - " + matchDate + ";" + matchHash + ";" + teamBlueID + ";" + teamRedID ; }
         }
 
         public int firstBlood { get; set; }
@@ -167,7 +180,8 @@ namespace IMGLMM
         public string kills { get; set; }
         public string deaths { get; set; }
         public string assists { get; set; }
-
+        
+        // Read api data to json files;
         public void ApiData()
         {
             using (var webClient = new System.Net.WebClient())
@@ -201,10 +215,9 @@ namespace IMGLMM
 
             using (var webClient = new System.Net.WebClient())
             {
-                var teamPerformances = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/teamperformance.php");
+                var teamPerformancesApi = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/teamperformance.php");
 
-                teamPerformances = @"{""teamperformance"" :" + teamPerformances + "}";
-                TeamPerformanceData(teamPerformances);
+                teamPerformances = @"{""teamperformance"" :" + teamPerformancesApi + "}";
             }
 
             using (var webClient = new System.Net.WebClient())
@@ -240,9 +253,6 @@ namespace IMGLMM
                 this.torunamentID = data.identifier;
 
                 tournamentsInfoList.Add(tournamentInfo);
-
-                /*Console.Write("tournament" + ":" + data.tournamentTitle + "\n");
-                Console.Write("ID" + ":" + data.identifier + "\n");*/
             }
         }
 
@@ -266,10 +276,6 @@ namespace IMGLMM
                         break;
                     }
                 }
-
-                /*Console.Write("match hash" + ":" + data.matchHash + "\n");
-                Console.Write("match date" + ":" + data.date + "\n");
-                Console.Write("ID" + ":" + data.identifier + "\n");*/
             }
 
             TeamData(teams, teamMatchIdentifieTable);
@@ -312,53 +318,96 @@ namespace IMGLMM
                                 }
                             }
                         }
-
                     }
 
-                string[] matchdate = MatchsInfoList[MatchsInfoListIndex].Split(';');
-                this.matchDate = matchdate[2];
-                Matchs.Add(teamInfo);
+                string[] matchinfo = MatchsInfoList[MatchsInfoListIndex].Split(';');
+                this.matchDate = matchinfo[2];
+                this.matchHash = matchinfo[0];
 
-                /*Console.Write("team name" + ":" + data.teamName + "\n");
-                Console.Write("team argonym" + ":" + data.teamArgonym + "\n");
-                Console.Write("ID" + ":" + data.identifier + "\n");*/
+                Matchs.Add(teamInfo);
             }
         }
 
-        public void TeamPerformanceData(string json)
+        public void TeamPerformanceData(int MatchsInfoListPosition)
         {
-            dynamic dynObj = JsonConvert.DeserializeObject(json);
+            teamBluePerformanceList.Clear();
+            teamRedPerformanceList.Clear();
+
+            dynamic dynObj = JsonConvert.DeserializeObject(teamPerformances);
+            string[] matchdata = Matchs[MatchsInfoListPosition].Split(';');
+
+            int teamsFounded = 0;
 
             foreach (var data in dynObj.teamperformance)
             {
-                this.firstBlood = data.firstBlood;
-                this.firstTower = data.firstTower;
-                this.firstInhibitor = data.firstInhibitor;
-                this.firstBaron = data.firstBaron;
-                this.firstDragon = data.firstDragon;
-                this.firstRiftHerald = data.firstRiftHerald;
-                this.towerTakedowns = data.towerTakedowns;
-                this.inhibitorTakedowns = data.inhibitorTakedowns;
-                this.baronKills = data.baronKills;
-                this.dragonKills = data.dragonKills;
-                this.riftHeraldKills = data.riftHeraldKills;
-                this.matchHash = data.matchHash;
-                this.teamID = data.team_identifier;
+                if (data.matchHash == matchdata[1] & data.team_identifier == matchdata[2]) {
+                    this.firstBlood = data.firstBlood;
+                    this.firstTower = data.firstTower;
+                    this.firstInhibitor = data.firstInhibitor;
+                    this.firstBaron = data.firstBaron;
+                    this.firstDragon = data.firstDragon;
+                    this.firstRiftHerald = data.firstRiftHerald;
+                    this.towerTakedowns = data.towerTakedowns;
+                    this.inhibitorTakedowns = data.inhibitorTakedowns;
+                    this.baronKills = data.baronKills;
+                    this.dragonKills = data.dragonKills;
+                    this.riftHeraldKills = data.riftHeraldKills;
 
-                /*Console.Write("firs tBlood" + ":" + data.firstBlood + "\n");
-                Console.Write("first Tower" + ":" + data.firstTower + "\n");
-                Console.Write("first Inhibitor" + ":" + data.firstInhibitor + "\n");
-                Console.Write("first Baron" + ":" + data.firstBaron + "\n");
-                Console.Write("first Dragon" + ":" + data.firstDragon + "\n");
-                Console.Write("firstRiftHerald" + ":" + data.firstRiftHerald + "\n");
-                Console.Write("tower Takedowns" + ":" + data.towerTakedowns + "\n");
-                Console.Write("inhibitor Takedowns" + ":" + data.inhibitorTakedowns + "\n");
-                Console.Write("baron kills" + ":" + data.baronKills + "\n");
-                Console.Write("dragon Kills" + ":" + data.dragonKills + "\n");
-                Console.Write("riftHerald Kills" + ":" + data.riftHeraldKills + "\n");
-                Console.Write("Match Hash" + ":" + data.matchHash + "\n");
-                Console.Write("ID" + ":" + data.team_identifier + "\n");*/
+                    teamBluePerformanceList.Add(this.firstBlood.ToString());
+                    teamBluePerformanceList.Add(this.firstTower.ToString());
+                    teamBluePerformanceList.Add(this.firstInhibitor.ToString());
+                    teamBluePerformanceList.Add(this.firstBaron.ToString());
+                    teamBluePerformanceList.Add(this.firstDragon.ToString());
+                    teamBluePerformanceList.Add(this.firstRiftHerald.ToString());
+                    teamBluePerformanceList.Add(this.towerTakedowns.ToString());
+                    teamBluePerformanceList.Add(this.inhibitorTakedowns.ToString());
+                    teamBluePerformanceList.Add(this.baronKills.ToString());
+                    teamBluePerformanceList.Add(this.dragonKills.ToString());
+                    teamBluePerformanceList.Add(this.riftHeraldKills.ToString());
+
+                    teamsFounded++;
+
+                } else if (data.matchHash == matchdata[1] & data.team_identifier == matchdata[3]) {
+                    this.firstBlood = data.firstBlood;
+                    this.firstTower = data.firstTower;
+                    this.firstInhibitor = data.firstInhibitor;
+                    this.firstBaron = data.firstBaron;
+                    this.firstDragon = data.firstDragon;
+                    this.firstRiftHerald = data.firstRiftHerald;
+                    this.towerTakedowns = data.towerTakedowns;
+                    this.inhibitorTakedowns = data.inhibitorTakedowns;
+                    this.baronKills = data.baronKills;
+                    this.dragonKills = data.dragonKills;
+                    this.riftHeraldKills = data.riftHeraldKills;
+
+                    teamRedPerformanceList.Add(this.firstBlood.ToString());
+                    teamRedPerformanceList.Add(this.firstTower.ToString());
+                    teamRedPerformanceList.Add(this.firstInhibitor.ToString());
+                    teamRedPerformanceList.Add(this.firstBaron.ToString());
+                    teamRedPerformanceList.Add(this.firstDragon.ToString());
+                    teamRedPerformanceList.Add(this.firstRiftHerald.ToString());
+                    teamRedPerformanceList.Add(this.towerTakedowns.ToString());
+                    teamRedPerformanceList.Add(this.inhibitorTakedowns.ToString());
+                    teamRedPerformanceList.Add(this.baronKills.ToString());
+                    teamRedPerformanceList.Add(this.dragonKills.ToString());
+                    teamRedPerformanceList.Add(this.riftHeraldKills.ToString());
+
+                    teamsFounded++;
+                }
+
+                // No need to search anymore
+                if(teamsFounded == 2) { break; }
             }
+        }
+
+        public List<String> teamBlue()
+        {
+            return teamBluePerformanceList;
+        }
+
+        public List<String> teamRed()
+        {
+            return teamRedPerformanceList;
         }
 
         public void PlayerData(string json)
@@ -369,9 +418,6 @@ namespace IMGLMM
             {
                 this.playerName = data.playerName;
                 this.playerID = data.identifier;
-
-                /*Console.Write("player name" + ":" + data.playerName + "\n");
-                Console.Write("ID" + ":" + data.identifier + "\n");*/
             }
         }
 
@@ -385,11 +431,6 @@ namespace IMGLMM
                 this.deaths = data.deaths;
                 this.assists = data.assist;
                 this.playerID = data.player_identifier;
-
-                /* Console.Write("kills" + ":" + data.kills + "\n");
-                 Console.Write("deathsr" + ":" + data.deaths + "\n");
-                 Console.Write("assists" + ":" + data.assist + "\n");
-                 Console.Write("playerID" + ":" + data.player_identifier + "\n");*/
             }
         }
 
@@ -419,7 +460,6 @@ namespace IMGLMM
             }
 
             return this.Matchs;
-            //return this.Matchs;
         }
     }
 }

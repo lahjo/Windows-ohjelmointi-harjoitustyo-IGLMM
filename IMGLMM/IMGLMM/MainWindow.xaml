@@ -15,7 +15,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="listView1" HorizontalAlignment="Left" Height="264" Margin="157,46,0,0" VerticalAlignment="Top" Width="207">
+        <ListView x:Name="listView1" HorizontalAlignment="Left" Height="264" Margin="157,46,0,0" VerticalAlignment="Top" Width="207" MouseDoubleClick="listView1_MouseDoubleClick">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
