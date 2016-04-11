@@ -40,6 +40,11 @@ namespace IMGLMM
             InitializeComponent();
             data.ApiData();
 
+            tournaments = data.TournamentList();
+
+            listView.ItemsSource = null;
+            listView.ItemsSource = tournaments;
+
         }
 
         private void button_Click(object sender, RoutedEventArgs e)
@@ -78,14 +83,6 @@ namespace IMGLMM
                  */
         }
 
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            tournaments = data.TournamentList();
-
-            listView.ItemsSource = null;
-            listView.ItemsSource = tournaments;
-        }
-
         private void listView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Matchs = data.MatchsList(listView.SelectedIndex);
@@ -99,12 +96,13 @@ namespace IMGLMM
 
     public class LolData
     {
-        private string date, tournamentMatchIdentifieTable, matchs;
+        private string date, tournamentMatchIdentifieTable, matchs, teams, teamMatchIdentifieTable;
 
         private List<String> tournamentsList = new List<String>();
         private List<String> tournamentsInfoList = new List<String>();
 
         private List<String> Matchs = new List<String>();
+        private List<String> MatchsInfoList = new List<String>();
 
         /*private List<String> MatchsEu2015Summer = new List<String>();
           private List<String> MatchsEu2015SummerPlayoffs = new List<String>();
@@ -127,10 +125,27 @@ namespace IMGLMM
         }
         public string matchID { get; set; }
         public string matchHash { get; set; }
+        public string matchInfo
+        {
+            get { return matchHash + ";" + matchID + ";" + matchDate; }
+        }
 
         public string teamName { get; set; }
         public string teamArgonym { get; set; }
         public string teamID { get; set; }
+
+        public string teamBlueName { get; set; }
+        public string teamBlueArgonym { get; set; }
+        public string teamBlueID { get; set; }
+
+        public string teamRedName { get; set; }
+        public string teamRedArgonym { get; set; }
+        public string teamRedID { get; set; }
+
+        public string teamInfo
+        {
+            get { return teamBlueName + " vs " + teamRedName + " - " + matchDate; }
+        }
 
         public int firstBlood { get; set; }
         public int firstTower { get; set; }
@@ -177,16 +192,11 @@ namespace IMGLMM
 
             using (var webClient = new System.Net.WebClient())
             {
-                var teams = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/team.php");
+                var teamMatchIdentifieTableApi = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/teammatch.php");
+                var teamsApi = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/team.php");
 
-                teams = @"{""team"" :" + teams + "}";
-                TeamData(teams);
-            }
-
-            using (var webClient = new System.Net.WebClient())
-            {
-                var teamMatchIdentifieTable = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/teammatch.php");
-
+                teamMatchIdentifieTable = @"{""dataStruct"" :" + teamMatchIdentifieTableApi + "}";
+                teams = @"{""team"" :" + teamsApi + "}";
             }
 
             using (var webClient = new System.Net.WebClient())
@@ -252,7 +262,7 @@ namespace IMGLMM
                 {
                     if (datastruct.tournament_identifier == tournamentIdentifier & datastruct.tournamentMatch_identifier == this.matchID)
                     {
-                        Matchs.Add(this.matchHash);
+                        MatchsInfoList.Add(matchInfo);
                         break;
                     }
                 }
@@ -261,17 +271,53 @@ namespace IMGLMM
                 Console.Write("match date" + ":" + data.date + "\n");
                 Console.Write("ID" + ":" + data.identifier + "\n");*/
             }
+
+            TeamData(teams, teamMatchIdentifieTable);
         }
 
-        public void TeamData(string json)
+        public void TeamData(string json, string structTable)
         {
             dynamic dynObj = JsonConvert.DeserializeObject(json);
+            dynamic dynObjStructTable = JsonConvert.DeserializeObject(structTable);
 
-            foreach (var data in dynObj.team)
+            int teamIndex = 0;
+
+            // Find teams [ teamBlue vs teamRed]
+            for (int MatchsInfoListIndex = 0; MatchsInfoListIndex < MatchsInfoList.Count; MatchsInfoListIndex++)
             {
-                this.teamName = data.teamName;
-                this.teamArgonym = data.teamArgonym;
-                this.teamID = data.identifier;
+
+                foreach (var data in dynObj.team)
+                {
+                    this.teamName = data.teamName;
+                    this.teamArgonym = data.teamArgonym;
+                    this.teamID = data.identifier;
+
+                    string[] matchdentifier = MatchsInfoList[MatchsInfoListIndex].Split(';');
+
+                    foreach (var datastruct in dynObjStructTable.dataStruct) {
+                        if (datastruct.tournamentMatch_identifier == matchdentifier[1] & datastruct.team_identifier == this.teamID) {
+                            // Get TeamBlue
+                                if (teamIndex == 0) {
+                                    this.teamBlueName = this.teamName;
+                                    this.teamBlueID = this.teamID;
+                                    teamIndex++;
+                                    break;
+                                }
+                            // Get TeamRed
+                                else if (teamIndex == 1) {
+                                    this.teamRedName = this.teamName;
+                                    this.teamRedID = this.teamID;
+                                    teamIndex = 0;
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+
+                string[] matchdate = MatchsInfoList[MatchsInfoListIndex].Split(';');
+                this.matchDate = matchdate[2];
+                Matchs.Add(teamInfo);
 
                 /*Console.Write("team name" + ":" + data.teamName + "\n");
                 Console.Write("team argonym" + ":" + data.teamArgonym + "\n");
@@ -362,10 +408,15 @@ namespace IMGLMM
         public List<String> MatchsList(int index)
         {
             Matchs.Clear();
+            MatchsInfoList.Clear();
 
             string[] tournamentIdentifier = tournamentsInfoList[index].Split(';');
 
             MatchData(matchs, tournamentMatchIdentifieTable, tournamentIdentifier[1]);
+
+            for (int i = 0; i < Matchs.Count; i++) {
+                Console.WriteLine(Matchs[i]);
+            }
 
             return this.Matchs;
             //return this.Matchs;
