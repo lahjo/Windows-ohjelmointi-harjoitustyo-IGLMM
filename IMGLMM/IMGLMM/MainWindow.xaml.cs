@@ -100,6 +100,8 @@ namespace IMGLMM
 
             //listView2.ItemsSource = data.teamBlue();
             listView2.ItemsSource = data.teamRed();
+
+            data.probability(listView1.SelectedIndex);
         }
         // }
     }
@@ -116,6 +118,9 @@ namespace IMGLMM
 
         private List<String> teamBluePerformanceList = new List<String>();
         private List<String> teamRedPerformanceList = new List<String>();
+
+        private List<String> teamBlueProbabilityList = new List<String>();
+        private List<String> teamRedProbabilityList = new List<String>();
 
         /*private List<String> MatchsEu2015Summer = new List<String>();
           private List<String> MatchsEu2015SummerPlayoffs = new List<String>();
@@ -398,6 +403,40 @@ namespace IMGLMM
                 // No need to search anymore
                 if(teamsFounded == 2) { break; }
             }
+        }
+
+        public List<String> probability(int MatchsInfoListPosition) {
+            dynamic dynObj = JsonConvert.DeserializeObject(teamPerformances);
+            string[] matchdata = Matchs[MatchsInfoListPosition].Split(';');
+
+            int teamfirstBlood = 0, teamfirstTower = 0, teamfirstInhibitor = 0, teamfirstBaron = 0, teamfirstDragon = 0, teamfirstRiftHerald = 0;
+            int allfirstBlood = 0, allfirstTower = 0, allfirstInhibitor = 0, allfirstBaron = 0, allfirstDragon = 0, allfirstRiftHerald = 0;
+
+            foreach (var data in dynObj.teamperformance)
+            {
+                if (data.team_identifier == matchdata[2])
+                {
+                    if (data.firstBlood != 0) { teamfirstBlood++; }
+                    if (data.firstTower != 0) { teamfirstTower++; }
+                    if (data.firstInhibitor != 0) { teamfirstInhibitor++; }
+                    if (data.firstBaron != 0) { teamfirstBaron++; }
+                    if (data.firstDragon != 0) { teamfirstDragon++; }
+                    if (data.firstRiftHerald != 0) { teamfirstRiftHerald++; }
+
+                }
+                else
+                {
+                    if (data.firstBlood != 0) { allfirstBlood++; }
+                    if (data.firstTower != 0) { allfirstTower++; }
+                    if (data.firstInhibitor != 0) { allfirstInhibitor++; }
+                    if (data.firstBaron != 0) { allfirstBaron++; }
+                    if (data.firstDragon != 0) { allfirstDragon++; }
+                    if (data.firstRiftHerald != 0) { allfirstRiftHerald++; }
+                }
+            }
+
+            // Debug only replace this
+            return Matchs;
         }
 
         public List<String> teamBlue()
