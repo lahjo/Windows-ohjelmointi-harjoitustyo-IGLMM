@@ -89,19 +89,23 @@ namespace IMGLMM
             Matchs = data.MatchsList(listView.SelectedIndex);
 
 
-            listView1.ItemsSource = null;
-            listView1.ItemsSource = Matchs;
+            listView3.ItemsSource = null;
+            listView3.ItemsSource = Matchs;
         }
 
-        private void listView1_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void listView3_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            data.TeamPerformanceData(listView1.SelectedIndex);
+            data.TeamPerformanceData(listView3.SelectedIndex);
             listView2.ItemsSource = null;
+            listView4.ItemsSource = null;
+            listView5.ItemsSource = null;
+            listView6.ItemsSource = null;
 
-            //listView2.ItemsSource = data.teamBlue();
-            listView2.ItemsSource = data.teamRed();
+            listView2.ItemsSource = data.teamBlue();
+            listView4.ItemsSource = data.teamRed();
 
-            data.probability(listView1.SelectedIndex);
+            listView5.ItemsSource = data.TeamBlueprobability(listView3.SelectedIndex);
+            listView6.ItemsSource = data.TeamRedprobability(listView3.SelectedIndex);
         }
         // }
     }
@@ -405,12 +409,14 @@ namespace IMGLMM
             }
         }
 
-        public List<String> probability(int MatchsInfoListPosition) {
+        public List<String> TeamBlueprobability(int MatchsInfoListPosition) {
             dynamic dynObj = JsonConvert.DeserializeObject(teamPerformances);
             string[] matchdata = Matchs[MatchsInfoListPosition].Split(';');
 
-            int teamfirstBlood = 0, teamfirstTower = 0, teamfirstInhibitor = 0, teamfirstBaron = 0, teamfirstDragon = 0, teamfirstRiftHerald = 0;
-            int allfirstBlood = 0, allfirstTower = 0, allfirstInhibitor = 0, allfirstBaron = 0, allfirstDragon = 0, allfirstRiftHerald = 0;
+            teamBlueProbabilityList.Clear();
+
+            double teamfirstBlood = 0, teamfirstTower = 0, teamfirstInhibitor = 0, teamfirstBaron = 0, teamfirstDragon = 0, teamfirstRiftHerald = 0;
+            double allfirstBlood = 0, allfirstTower = 0, allfirstInhibitor = 0, allfirstBaron = 0, allfirstDragon = 0, allfirstRiftHerald = 0;
 
             foreach (var data in dynObj.teamperformance)
             {
@@ -435,8 +441,58 @@ namespace IMGLMM
                 }
             }
 
+            teamBlueProbabilityList.Add((teamfirstBlood / (teamfirstBlood + allfirstBlood)).ToString());
+            teamBlueProbabilityList.Add((teamfirstTower / (teamfirstTower + allfirstTower)).ToString());
+            teamBlueProbabilityList.Add((teamfirstInhibitor / (teamfirstInhibitor + allfirstInhibitor)).ToString());
+            teamBlueProbabilityList.Add((teamfirstBaron / (teamfirstBaron + allfirstBaron)).ToString());
+            teamBlueProbabilityList.Add((teamfirstDragon / (teamfirstDragon + allfirstDragon)).ToString());
+            teamBlueProbabilityList.Add((teamfirstRiftHerald / (teamfirstRiftHerald + allfirstRiftHerald)).ToString());
+
+            return teamBlueProbabilityList;
+        }
+
+        public List<String> TeamRedprobability(int MatchsInfoListPosition)
+        {
+            dynamic dynObj = JsonConvert.DeserializeObject(teamPerformances);
+            string[] matchdata = Matchs[MatchsInfoListPosition].Split(';');
+
+            teamRedProbabilityList.Clear();
+
+            float teamfirstBlood = 0, teamfirstTower = 0, teamfirstInhibitor = 0, teamfirstBaron = 0, teamfirstDragon = 0, teamfirstRiftHerald = 0;
+            float allfirstBlood = 0, allfirstTower = 0, allfirstInhibitor = 0, allfirstBaron = 0, allfirstDragon = 0, allfirstRiftHerald = 0;
+
+            foreach (var data in dynObj.teamperformance)
+            {
+                if (data.team_identifier == matchdata[3])
+                {
+                    if (data.firstBlood != 0) { teamfirstBlood++; }
+                    if (data.firstTower != 0) { teamfirstTower++; }
+                    if (data.firstInhibitor != 0) { teamfirstInhibitor++; }
+                    if (data.firstBaron != 0) { teamfirstBaron++; }
+                    if (data.firstDragon != 0) { teamfirstDragon++; }
+                    if (data.firstRiftHerald != 0) { teamfirstRiftHerald++; }
+
+                }
+                else
+                {
+                    if (data.firstBlood != 0) { allfirstBlood++; }
+                    if (data.firstTower != 0) { allfirstTower++; }
+                    if (data.firstInhibitor != 0) { allfirstInhibitor++; }
+                    if (data.firstBaron != 0) { allfirstBaron++; }
+                    if (data.firstDragon != 0) { allfirstDragon++; }
+                    if (data.firstRiftHerald != 0) { allfirstRiftHerald++; }
+                }
+            }
+
+            teamRedProbabilityList.Add((teamfirstBlood / (teamfirstBlood + allfirstBlood)).ToString());
+            teamRedProbabilityList.Add((teamfirstTower / (teamfirstTower + allfirstTower)).ToString());
+            teamRedProbabilityList.Add((teamfirstInhibitor / (teamfirstInhibitor + allfirstInhibitor)).ToString());
+            teamRedProbabilityList.Add((teamfirstBaron / (teamfirstBaron + allfirstBaron)).ToString());
+            teamRedProbabilityList.Add((teamfirstDragon / (teamfirstDragon + allfirstDragon)).ToString());
+            teamRedProbabilityList.Add((teamfirstRiftHerald / (teamfirstRiftHerald + allfirstRiftHerald)).ToString());
+
             // Debug only replace this
-            return Matchs;
+            return teamRedProbabilityList;
         }
 
         public List<String> teamBlue()
@@ -493,10 +549,6 @@ namespace IMGLMM
             string[] tournamentIdentifier = tournamentsInfoList[index].Split(';');
 
             MatchData(matchs, tournamentMatchIdentifieTable, tournamentIdentifier[1]);
-
-            for (int i = 0; i < Matchs.Count; i++) {
-                Console.WriteLine(Matchs[i]);
-            }
 
             return this.Matchs;
         }
