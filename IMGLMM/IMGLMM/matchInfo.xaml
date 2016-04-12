@@ -1,0 +1,191 @@
+﻿<Window x:Class="IMGLMM.matchInfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="matchInfo" Height="600" Width="680">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="45*"/>
+            <ColumnDefinition Width="67*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock HorizontalAlignment="Left" Margin="38,10,0,0" TextWrapping="Wrap" Text="Match A" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="128,35,0,0" TextWrapping="Wrap" Text="Team A" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="220,35,0,0" TextWrapping="Wrap" Text="Team B" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="46,61,0,0" TextWrapping="Wrap" Text="Kills" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="38,82,0,0" TextWrapping="Wrap" Text="Deaths" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.49,0.501"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,103,0,0" TextWrapping="Wrap" Text="Tower Takedowns" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="0,124,0,0" TextWrapping="Wrap" Text="Inhibitor Takedowns" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="27,145,0,0" TextWrapping="Wrap" Text="Baron Kills" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="23,166,0,0" TextWrapping="Wrap" Text="Dragon Kills" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="27,232,0,0" TextWrapping="Wrap" Text="First Blood" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="27,253,0,0" TextWrapping="Wrap" Text="First Tower" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="23,274,0,0" TextWrapping="Wrap" Text="First Inhibitor" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="27,296,0,0" TextWrapping="Wrap" Text="First Baron" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="23,316,0,0" TextWrapping="Wrap" Text="First Dragon" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="16,337,0,0" TextWrapping="Wrap" Text="First Rift Herald" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,382,0,0" TextWrapping="Wrap" Text="Player Information" VerticalAlignment="Top" Grid.Column="1"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="137,232,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="137,338,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.421,0.467"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="137,254,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.368,0.533"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="137,275,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="137,296,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="137,317,0,0" VerticalAlignment="Top"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="232,232,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="232,338,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.421,0.467" Grid.Column="1"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="232,254,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.368,0.533" Grid.Column="1"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="232,275,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="232,296,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <RadioButton Content="" HorizontalAlignment="Left" Margin="232,317,0,0" VerticalAlignment="Top" Grid.Column="1"/>
+        <Grid Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="156" Margin="10,403,0,0" VerticalAlignment="Top" Width="318">
+            <ListView HorizontalAlignment="Left" Height="115" Margin="255,31,0,0" VerticalAlignment="Top" Width="53">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <TextBlock HorizontalAlignment="Left" Margin="197,10,0,0" TextWrapping="Wrap" Text="Assists" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="255,10,0,0" TextWrapping="Wrap" Text="Deaths" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="139,10,0,0" TextWrapping="Wrap" Text="Kills" VerticalAlignment="Top" RenderTransformOrigin="0.385,0.501"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Players" VerticalAlignment="Top"/>
+            <ListView HorizontalAlignment="Left" Height="115" Margin="197,31,0,0" VerticalAlignment="Top" Width="53">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ListView HorizontalAlignment="Left" Height="115" Margin="139,31,0,0" VerticalAlignment="Top" Width="53">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ListView HorizontalAlignment="Left" Height="115" Margin="10,31,0,0" VerticalAlignment="Top" Width="115">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Grid HorizontalAlignment="Left" Height="156" Margin="10,403,-10,-403" VerticalAlignment="Top" Width="318">
+                <ListView HorizontalAlignment="Left" Height="115" Margin="255,31,0,0" VerticalAlignment="Top" Width="53">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <TextBlock HorizontalAlignment="Left" Margin="197,10,0,0" TextWrapping="Wrap" Text="Assists" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="255,10,0,0" TextWrapping="Wrap" Text="Deaths" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="139,10,0,0" TextWrapping="Wrap" Text="Kills" VerticalAlignment="Top" RenderTransformOrigin="0.385,0.501"/>
+                <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Players" VerticalAlignment="Top"/>
+                <ListView HorizontalAlignment="Left" Height="115" Margin="197,31,0,0" VerticalAlignment="Top" Width="53">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <ListView HorizontalAlignment="Left" Height="115" Margin="139,31,0,0" VerticalAlignment="Top" Width="53">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <ListView HorizontalAlignment="Left" Height="115" Margin="10,31,0,0" VerticalAlignment="Top" Width="115">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </Grid>
+        <Grid HorizontalAlignment="Left" Height="156" Margin="62,403,0,0" VerticalAlignment="Top" Width="318" Grid.Column="1">
+            <ListView HorizontalAlignment="Left" Height="115" Margin="255,31,0,0" VerticalAlignment="Top" Width="53">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <TextBlock HorizontalAlignment="Left" Margin="197,10,0,0" TextWrapping="Wrap" Text="Assists" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="255,10,0,0" TextWrapping="Wrap" Text="Deaths" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="139,10,0,0" TextWrapping="Wrap" Text="Kills" VerticalAlignment="Top" RenderTransformOrigin="0.385,0.501"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Players" VerticalAlignment="Top"/>
+            <ListView HorizontalAlignment="Left" Height="115" Margin="197,31,0,0" VerticalAlignment="Top" Width="53">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ListView HorizontalAlignment="Left" Height="115" Margin="139,31,0,0" VerticalAlignment="Top" Width="53">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ListView HorizontalAlignment="Left" Height="115" Margin="10,31,0,0" VerticalAlignment="Top" Width="115">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Grid HorizontalAlignment="Left" Height="156" Margin="10,403,-10,-403" VerticalAlignment="Top" Width="318">
+                <ListView HorizontalAlignment="Left" Height="115" Margin="255,31,0,0" VerticalAlignment="Top" Width="53">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <TextBlock HorizontalAlignment="Left" Margin="197,10,0,0" TextWrapping="Wrap" Text="Assists" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="255,10,0,0" TextWrapping="Wrap" Text="Deaths" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" Margin="139,10,0,0" TextWrapping="Wrap" Text="Kills" VerticalAlignment="Top" RenderTransformOrigin="0.385,0.501"/>
+                <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Players" VerticalAlignment="Top"/>
+                <ListView HorizontalAlignment="Left" Height="115" Margin="197,31,0,0" VerticalAlignment="Top" Width="53">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <ListView HorizontalAlignment="Left" Height="115" Margin="139,31,0,0" VerticalAlignment="Top" Width="53">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <ListView HorizontalAlignment="Left" Height="115" Margin="10,31,0,0" VerticalAlignment="Top" Width="115">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </Grid>
+        <TextBlock HorizontalAlignment="Left" Margin="16,187,0,0" TextWrapping="Wrap" Text="Rift herald Kills" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="109,61,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="109,82,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="109,103,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="109,124,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="109,145,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="109,166,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="109,187,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="200,61,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="200,82,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="200,103,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="200,124,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="200,145,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="200,166,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="200,187,0,0" TextWrapping="Wrap" Text="insert number" VerticalAlignment="Top" Grid.Column="1"/>
+
+    </Grid>
+</Window>
