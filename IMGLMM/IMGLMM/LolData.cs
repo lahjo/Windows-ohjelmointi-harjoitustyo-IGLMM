@@ -9,7 +9,7 @@ namespace IMGLMM
 {
     public class LolData
     {
-        private string date, tournamentMatchIdentifieTable, matchs, teams, teamMatchIdentifieTable, teamPerformances, matchTitle, playerPerformances;
+        private string date, tournamentMatchIdentifieTable, matchs, teams, teamMatchIdentifieTable, teamPerformances, matchTitle, playerPerformances, teamPlayerIdentifieTable, player;
         private int kills, deaths, assists;
 
         private List<String> tournamentsList = new List<String>();
@@ -25,6 +25,14 @@ namespace IMGLMM
         private List<String> teamBlueProbabilityList = new List<String>();
         private List<String> teamRedProbabilityList = new List<String>();
 
+        private List<String> playerList = new List<String>();
+        private List<String> teamBluePlayerList = new List<String>();
+        private List<String> teamRedPlayerList = new List<String>();
+
+        private List<String> RedTeamRosterAndStats = new List<String>();
+        private List<String> BlueTeamRosterAndStats = new List<String>();
+
+
         private string[] matchdata;
 
         public string tournamentTitle { get; set; }
@@ -37,7 +45,7 @@ namespace IMGLMM
         public string tournamentMatchTitle
         {
             set { matchTitle = value; }
-            
+
             get { return matchTitle; }
         }
 
@@ -70,6 +78,15 @@ namespace IMGLMM
         public string teamInfo
         {
             get { return teamBlueName + " vs " + teamRedName + " - " + matchDate + ";" + matchHash + ";" + teamBlueID + ";" + teamRedID; }
+        }
+
+        public int kill { get; set; }
+        public int deadth { get; set; }
+        public int assist { get; set; }
+
+        public string TeamRoster
+        {
+            get { return playerName + ";" + this.kill + ";" + this.deadth + ";" + this.assist; }
         }
 
         public int firstBlood { get; set; }
@@ -130,10 +147,24 @@ namespace IMGLMM
 
             using (var webClient = new System.Net.WebClient())
             {
+                var playerApi = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/player.php");
+
+                player = @"{""players"" :" + playerApi + "}";
+                //PlayerPerformanceData(playerPerformances);
+            }
+
+            using (var webClient = new System.Net.WebClient())
+            {
+                var teamPlayerApi = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/playerteam.php");
+
+                teamPlayerIdentifieTable = @"{""teamPlayer"" :" + teamPlayerApi + "}";
+            }
+
+            using (var webClient = new System.Net.WebClient())
+            {
                 var playerPerformancesApi = webClient.DownloadString("http://datamining-esportlol.rhcloud.com/api/playerperformance.php");
 
                 playerPerformances = @"{""playerperformance"" :" + playerPerformancesApi + "}";
-                //PlayerPerformanceData(playerPerformances);
             }
         }
 
@@ -230,6 +261,12 @@ namespace IMGLMM
         {
             teamBluePerformanceList.Clear();
             teamRedPerformanceList.Clear();
+            playerList.Clear();
+            RedTeamRosterAndStats.Clear();
+            BlueTeamRosterAndStats.Clear();
+            teamBluePlayerList.Clear();
+            teamRedPlayerList.Clear();
+
 
             dynamic dynObj = JsonConvert.DeserializeObject(teamPerformances);
             matchdata = Matchs[MatchsInfoListPosition].Split(';');
@@ -238,6 +275,40 @@ namespace IMGLMM
             string[] teamname = matchdata[0].Split(' ');
 
             int teamsFounded = 0;
+
+            // get all player whos have this matchID
+            // Players
+            dynamic dynObjrosters = JsonConvert.DeserializeObject(playerPerformances);
+
+            foreach (var rosterdata in dynObjrosters.playerperformance)
+            {
+                if (rosterdata.matchHash == matchdata[1])
+                {
+                    string player = rosterdata.player_identifier;
+                    playerList.Add(player);
+                }
+
+            }
+
+           dynamic dynObjrosterIdentification = JsonConvert.DeserializeObject(teamPlayerIdentifieTable);
+
+            for(int playerListIndex = 0; playerListIndex < playerList.Count; playerListIndex++) { 
+                foreach (var playerRosterdata in dynObjrosterIdentification.teamPlayer)
+                {
+                    if (playerRosterdata.team_identifier == matchdata[2] & playerRosterdata.player_identifier == playerList[playerListIndex])
+                    {
+                        string blueplayer = playerList[playerListIndex];
+                        teamBluePlayerList.Add(blueplayer);
+                    }
+                    else if (playerRosterdata.team_identifier == matchdata[3] & playerRosterdata.player_identifier == playerList[playerListIndex]) {
+                        string redplayer = playerList[playerListIndex];
+                        teamRedPlayerList.Add(redplayer);
+                    }
+
+                }
+            }
+
+            dynamic dynObjPlayer = JsonConvert.DeserializeObject(player);
 
             foreach (var data in dynObj.teamperformance)
             {
@@ -255,7 +326,7 @@ namespace IMGLMM
                     this.dragonKills = data.dragonKills;
                     this.riftHeraldKills = data.riftHeraldKills;
 
-                    
+
                     teamBluePerformanceList.Add(teamname[0]);
                     teamBluePerformanceList.Add(this.firstBlood.ToString());
                     teamBluePerformanceList.Add(this.firstTower.ToString());
@@ -271,6 +342,34 @@ namespace IMGLMM
 
                     teamsFounded++;
 
+                    for (int playerListIndex = 0; playerListIndex < teamBluePlayerList.Count; playerListIndex++) { 
+                        dynamic dynObjPlayersStats = JsonConvert.DeserializeObject(playerPerformances);
+
+                        foreach (var playerdata in dynObjPlayersStats.playerperformance)
+                        {
+                            string playerId = playerdata.player_identifier;
+                            if (playerdata.matchHash == matchdata[1] & teamBluePlayerList[playerListIndex] == playerId)
+                            {
+                                foreach (var findBluePlayerName in dynObjPlayer.players)
+                                {
+                                    if (findBluePlayerName.identifier == teamBluePlayerList[playerListIndex])
+                                    {
+                                        playerName = findBluePlayerName.playerName;
+                                    }
+                                }
+
+                                string playerKills = playerdata.kills;
+                                string playerDeaths = playerdata.deaths;
+                                string playerAssists = playerdata.assist;
+
+                                this.kill = int.Parse(playerKills);
+                                this.deadth = int.Parse(playerDeaths);
+                                this.assist = int.Parse(playerAssists);
+
+                                BlueTeamRosterAndStats.Add(TeamRoster);
+                            }
+                        }
+                    }
                 }
                 else if (data.matchHash == matchdata[1] & data.team_identifier == matchdata[3])
                 {
@@ -301,20 +400,33 @@ namespace IMGLMM
 
                     teamsFounded++;
 
-                    // Players
-                    // DATABASE problem
-                    /*dynamic dynObjPlayers = JsonConvert.DeserializeObject(playerPerformances);
-                    foreach (var playerdata in dynObjPlayers.playerperformance) {
-                        if (playerdata.matchHash == matchdata[1]) {
-                            kills = 0;
-                            deaths = 0;
-                            assists = 0;
-                            kills =+ playerdata.kills;
-                            deaths =+ playerdata.deaths;
-                            assists =+ playerdata.assist;
+                    for (int playerListIndex = 0; playerListIndex < teamRedPlayerList.Count; playerListIndex++)
+                    {
+                        dynamic dynObjPlayersStats = JsonConvert.DeserializeObject(playerPerformances);
+
+                        foreach (var playerdata in dynObjPlayersStats.playerperformance)
+                        {
+                            string playerId = playerdata.player_identifier;
+                            if (playerdata.matchHash == matchdata[1] & teamRedPlayerList[playerListIndex] == playerId)
+                            {
+                                foreach (var findRedPlayerName in dynObjPlayer.players)
+                                {
+                                    if (findRedPlayerName.identifier == teamRedPlayerList[playerListIndex]) {
+                                        playerName = findRedPlayerName.playerName;
+                                    }
+                                }
+
+                                string playerKills = playerdata.kills;
+                                string playerDeaths = playerdata.deaths;
+                                string playerAssists = playerdata.assist;
+
+                                this.kill = int.Parse(playerKills);
+                                this.deadth = int.Parse(playerDeaths);
+                                this.assist = int.Parse(playerAssists);
+                                RedTeamRosterAndStats.Add(TeamRoster);
+                            }
                         }
-                            
-                    }*/
+                    }
                 }
 
                 // No need to search anymore
@@ -424,6 +536,16 @@ namespace IMGLMM
             return teamRedProbabilityList;
         }
 
+        public List<String> teamBlueStats()
+        {
+            return BlueTeamRosterAndStats;
+        }
+
+        public List<String> teamRedStats()
+        {
+            return RedTeamRosterAndStats;
+        }
+
         public void PlayerData(string json)
         {
             dynamic dynObj = JsonConvert.DeserializeObject(json);
@@ -471,8 +593,8 @@ namespace IMGLMM
 
             for (int i = 0; i < Matchs.Count; i++)
             {
-                string[] a = Matchs[i].Split(';');
-                MatchsListviewList.Add(a[0]);
+                string[] matchlist = Matchs[i].Split(';');
+                MatchsListviewList.Add(matchlist[0]);
             }
 
             return MatchsListviewList;

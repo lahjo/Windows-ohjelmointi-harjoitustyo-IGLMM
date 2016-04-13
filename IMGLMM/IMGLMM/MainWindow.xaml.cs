@@ -40,22 +40,38 @@ namespace IMGLMM
 
         private void tournamentView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Matchs = data.MatchsList(tournamentView.SelectedIndex);
+            try
+            {
+                Matchs = data.MatchsList(tournamentView.SelectedIndex);
 
 
-            MatchView.ItemsSource = null;
-            MatchView.ItemsSource = Matchs;
+                MatchView.ItemsSource = null;
+                MatchView.ItemsSource = Matchs;
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void MatchView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            data.TeamPerformanceData(MatchView.SelectedIndex);
+            try
+            {
+                data.TeamPerformanceData(MatchView.SelectedIndex);
 
-            matchInfo window = new matchInfo(data);
-            window.ShowDialog();
+                matchInfo window = new matchInfo(data);
+                window.ShowDialog();
 
-            data.TeamBlueprobability(MatchView.SelectedIndex);
-            data.TeamRedprobability(MatchView.SelectedIndex);
+                data.TeamBlueprobability(MatchView.SelectedIndex);
+                data.TeamRedprobability(MatchView.SelectedIndex);
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

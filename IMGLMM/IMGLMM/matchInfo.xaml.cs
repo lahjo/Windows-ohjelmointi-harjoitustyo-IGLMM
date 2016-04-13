@@ -26,8 +26,22 @@ namespace IMGLMM
         private List<String> teamBlueProbabilityList = new List<String>();
         private List<String> teamRedProbabilityList = new List<String>();
 
+        private List<String> teamBlueRoster = new List<String>();
+        private List<String> teamBluePlayerNames = new List<String>();
+        private List<String> teamBluePlayerKills = new List<String>();
+        private List<String> teamBluePlayerDeaths = new List<String>();
+        private List<String> teamBluePlayerAssists = new List<String>();
+
+        private List<String> teamRedRoster = new List<String>();
+        private List<String> teamRedPlayerNames = new List<String>();
+        private List<String> teamRedPlayerKills = new List<String>();
+        private List<String> teamRedPlayerDeaths = new List<String>();
+        private List<String> teamRedPlayerAssists = new List<String>();
+        private int teamBlueKillsAmount, teamRedKillsAmount, teamBlueDeathsAmount, teamRedDeathsAmount;
+
         public matchInfo(LolData data)
         {
+            
             InitializeComponent();
 
             this.data = data;
@@ -37,16 +51,42 @@ namespace IMGLMM
             teamBlueProbabilityList.Clear();
             teamRedProbabilityList.Clear();
 
+            teamBlueRoster.Clear();
+            teamBluePlayerNames.Clear();
+            teamBluePlayerKills.Clear();
+            teamBluePlayerDeaths.Clear();
+            teamBluePlayerAssists.Clear();
+
+            teamRedRoster.Clear();
+            teamRedPlayerNames.Clear();
+            teamRedPlayerKills.Clear();
+            teamRedPlayerDeaths.Clear();
+            teamRedPlayerAssists.Clear();
+
+            teamBluePlayerListview.ItemsSource = null;
+            teamBlueKillsListview.ItemsSource = null;
+            teamBlueDeathsListview.ItemsSource = null;
+            teamBlueAssistsListview.ItemsSource = null;
+
+            teamRedPlayerListview.ItemsSource = null;
+            teamRedKillsListview.ItemsSource = null;
+            teamRedDeathsListview.ItemsSource = null;
+            teamRedAssistsListview.ItemsSource = null;
+
             teamBluePerformanceList = data.teamBlue();
             teamRedPerformanceList = data.teamRed();
 
             teamBlueProbabilityList = data.teamBlueProbability();
             teamRedProbabilityList = data.teamRedProbability();
 
-            //string[] teamPerformance = null;
-            for (int i = 0; i < teamBluePerformanceList.Count; i++) {
-                string[] teamPerformance = teamBluePerformanceList[i].Split(';');
-            }
+            teamBlueRoster = data.teamBlueStats();
+            teamRedRoster = data.teamRedStats();
+
+            teamBlueKillsAmount = 0;
+            teamRedKillsAmount = 0;
+
+            teamBlueDeathsAmount = 0;
+            teamRedDeathsAmount = 0;
 
             MatchTitle.Text = data.tournamentMatchTitle;
 
@@ -141,6 +181,56 @@ namespace IMGLMM
                 teamRedFirstDragonProbability.Text = "";
                 teamRedFirstRiftHeraldProbability.Text = "";
             }
+
+            try
+            {
+                string[] rosterstats = null;
+                for (int i = 0; i < teamBlueRoster.Count; i++)
+                {
+                    rosterstats = teamBlueRoster[i].Split(';');
+                    teamBluePlayerNames.Add(rosterstats[0]);
+                    teamBluePlayerKills.Add(rosterstats[1]);
+                    teamBluePlayerDeaths.Add(rosterstats[2]);
+                    teamBluePlayerAssists.Add(rosterstats[3]);
+
+                    this.teamBlueKillsAmount += int.Parse(rosterstats[1]);
+                    this.teamBlueDeathsAmount += int.Parse(rosterstats[2]);
+                }
+
+                rosterstats = null;
+                for (int i = 0; i < teamRedRoster.Count; i++)
+                {
+                    rosterstats = teamRedRoster[i].Split(';');
+                    teamRedPlayerNames.Add(rosterstats[0]);
+                    teamRedPlayerKills.Add(rosterstats[1]);
+                    teamRedPlayerDeaths.Add(rosterstats[2]);
+                    teamRedPlayerAssists.Add(rosterstats[3]);
+
+                    this.teamRedKillsAmount += int.Parse(rosterstats[1]);
+                    this.teamRedDeathsAmount += int.Parse(rosterstats[2]);
+                }
+
+                teamBluePlayerListview.ItemsSource = teamBluePlayerNames;
+                teamBlueKillsListview.ItemsSource = teamBluePlayerKills;
+                teamBlueDeathsListview.ItemsSource = teamBluePlayerDeaths;
+                teamBlueAssistsListview.ItemsSource = teamBluePlayerAssists;
+
+                teamRedPlayerListview.ItemsSource = teamRedPlayerNames;
+                teamRedKillsListview.ItemsSource = teamRedPlayerKills;
+                teamRedDeathsListview.ItemsSource = teamRedPlayerDeaths;
+                teamRedAssistsListview.ItemsSource = teamRedPlayerAssists;
+
+                teamBlueKills.Text = teamBlueKillsAmount.ToString();
+                teamRedKills.Text = teamRedKillsAmount.ToString();
+                teamBlueDeaths.Text = teamBlueDeathsAmount.ToString();
+                teamRedDeaths.Text = teamRedDeathsAmount.ToString();
+            }
+            catch (Exception)
+            {
+
+                
+            }
+
         }
     }
 }

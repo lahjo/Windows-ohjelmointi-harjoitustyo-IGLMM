@@ -36,7 +36,7 @@
         <CheckBox x:Name="teamRedFirstBaron" Content="" HorizontalAlignment="Left" Margin="232,296,0,0" VerticalAlignment="Top" Grid.Column="1" IsEnabled="False"/>
         <CheckBox x:Name="teamRedFirstDragon" Content="" HorizontalAlignment="Left" Margin="232,317,0,0" VerticalAlignment="Top" Grid.Column="1" IsEnabled="False"/>
         <Grid Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="156" Margin="10,403,0,0" VerticalAlignment="Top" Width="318">
-            <ListView HorizontalAlignment="Left" Height="115" Margin="255,31,0,0" VerticalAlignment="Top" Width="53">
+            <ListView x:Name="teamBlueAssistsListview" HorizontalAlignment="Left" Height="115" Margin="255,31,0,0" VerticalAlignment="Top" Width="53">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn/>
@@ -47,21 +47,21 @@
             <TextBlock HorizontalAlignment="Left" Margin="255,10,0,0" TextWrapping="Wrap" Text="Deaths" VerticalAlignment="Top"/>
             <TextBlock HorizontalAlignment="Left" Margin="139,10,0,0" TextWrapping="Wrap" Text="Kills" VerticalAlignment="Top" RenderTransformOrigin="0.385,0.501"/>
             <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Players" VerticalAlignment="Top"/>
-            <ListView HorizontalAlignment="Left" Height="115" Margin="197,31,0,0" VerticalAlignment="Top" Width="53">
+            <ListView x:Name="teamBlueDeathsListview" HorizontalAlignment="Left" Height="115" Margin="197,31,0,0" VerticalAlignment="Top" Width="53">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn/>
                     </GridView>
                 </ListView.View>
             </ListView>
-            <ListView HorizontalAlignment="Left" Height="115" Margin="139,31,0,0" VerticalAlignment="Top" Width="53">
+            <ListView x:Name="teamBlueKillsListview" HorizontalAlignment="Left" Height="115" Margin="139,31,0,0" VerticalAlignment="Top" Width="53">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn/>
                     </GridView>
                 </ListView.View>
             </ListView>
-            <ListView HorizontalAlignment="Left" Height="115" Margin="10,31,0,0" VerticalAlignment="Top" Width="115">
+            <ListView x:Name="teamBluePlayerListview" HorizontalAlignment="Left" Height="115" Margin="10,31,0,0" VerticalAlignment="Top" Width="115">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn/>
@@ -70,7 +70,7 @@
             </ListView>
         </Grid>
         <Grid HorizontalAlignment="Left" Height="156" Margin="62,403,0,0" VerticalAlignment="Top" Width="318" Grid.Column="1">
-            <ListView HorizontalAlignment="Left" Height="115" Margin="255,31,0,0" VerticalAlignment="Top" Width="53">
+            <ListView x:Name="teamRedDeathsListview" HorizontalAlignment="Left" Height="115" Margin="255,31,0,0" VerticalAlignment="Top" Width="53">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn/>
@@ -81,21 +81,21 @@
             <TextBlock HorizontalAlignment="Left" Margin="255,10,0,0" TextWrapping="Wrap" Text="Deaths" VerticalAlignment="Top"/>
             <TextBlock HorizontalAlignment="Left" Margin="139,10,0,0" TextWrapping="Wrap" Text="Kills" VerticalAlignment="Top" RenderTransformOrigin="0.385,0.501"/>
             <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Players" VerticalAlignment="Top"/>
-            <ListView HorizontalAlignment="Left" Height="115" Margin="197,31,0,0" VerticalAlignment="Top" Width="53">
+            <ListView x:Name="teamRedAssistsListview" HorizontalAlignment="Left" Height="115" Margin="197,31,0,0" VerticalAlignment="Top" Width="53">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn/>
                     </GridView>
                 </ListView.View>
             </ListView>
-            <ListView HorizontalAlignment="Left" Height="115" Margin="139,31,0,0" VerticalAlignment="Top" Width="53">
+            <ListView x:Name="teamRedKillsListview" HorizontalAlignment="Left" Height="115" Margin="139,31,0,0" VerticalAlignment="Top" Width="53">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn/>
                     </GridView>
                 </ListView.View>
             </ListView>
-            <ListView HorizontalAlignment="Left" Height="115" Margin="10,31,0,0" VerticalAlignment="Top" Width="115">
+            <ListView x:Name="teamRedPlayerListview" HorizontalAlignment="Left" Height="115" Margin="10,31,0,0" VerticalAlignment="Top" Width="115">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn/>
